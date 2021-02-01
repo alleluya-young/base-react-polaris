@@ -1,5 +1,4 @@
 import React from "react";
-import "@emotion/react";
 import { Button } from "@shopify/polaris";
 
 function App() {
