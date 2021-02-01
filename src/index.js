@@ -7,14 +7,14 @@ import { Global } from "@emotion/react";
 import { normalize } from "polished";
 import { conf, ConfigProvider } from "./core/config";
 
-import App from "./App";
+import { Routes } from "./core/routes";
 
 ReactDOM.render(
   <React.StrictMode>
     <AppProvider i18n={zhTranslations}>
       <ConfigProvider value={{ config: conf() }}>
         <Global styles={normalize()} />
-        <App />
+        <Routes />
       </ConfigProvider>
     </AppProvider>
   </React.StrictMode>,
