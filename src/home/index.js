@@ -1,5 +1,5 @@
 import React from "react";
-import { useConfig } from "../config";
+import { useConfig } from "../core/config";
 import { Button } from "@shopify/polaris";
 import { useHistory } from "react-router-dom";
 

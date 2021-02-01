@@ -7,7 +7,7 @@ import { Global } from "@emotion/react";
 import { normalize } from "polished";
 import { conf, ConfigProvider } from "./core/config";
 
-import { Routes } from "./core/routes";
+import { Routes } from "./routes";
 
 ReactDOM.render(
   <React.StrictMode>
