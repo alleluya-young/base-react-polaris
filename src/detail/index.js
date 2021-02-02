@@ -14,6 +14,7 @@ export const Detail = () => {
       >
         Back
       </Button>
+        详情
     </div>
   );
 };
