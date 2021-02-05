@@ -1,6 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { Button } from "@shopify/polaris";
+import {Button} from '@material-ui/core'
 
 export const Detail = () => {
   const history = useHistory();

@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useConfig } from "../core/config";
-import { Button } from "@shopify/polaris";
 import { useHistory } from "react-router-dom";
 import { useRequest } from "../core/request";
+import { Button, Drawer } from "@material-ui/core";
 
 export const Home = () => {
   const config = useConfig();
@@ -19,12 +19,15 @@ export const Home = () => {
       Home
       <Button
         onClick={() => {
-          // history.push("/detail");
-          run();
+          history.push("/detail");
+          // run();
         }}
       >
         To Detail
       </Button>
+      <Drawer anchor={"left"} open={true}>
+        <div>content</div>
+      </Drawer>
     </div>
   );
 };
