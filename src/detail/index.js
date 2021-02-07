@@ -1,129 +1,11 @@
-import React, { useCallback, useState, useReducer } from 'react';
+import React, { useState, useReducer } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSwipeable } from 'react-swipeable';
 import { map } from 'lodash';
+import { Rate } from '../component/Rate';
+import { GoodsSwiper, Item } from '../component/GoodsSwiper';
 // import { Icon } from '@shopify/polaris';
 // import { ArrowLeftMinor, ArrowRightMinor } from '@shopify/polaris-icons';
-const Item = props => {
-  const { src } = props;
-  return (
-    <div
-      css={{
-        textAlign: 'center',
-        backgroundSize: 'cover',
-        backgroundImage: `url(${src})`,
-        width: 'auto',
-        height: 360,
-      }}
-    ></div>
-  );
-};
-const CarouselContainer = props => {
-  const { sliding, dir } = props;
-  return (
-    <div
-      css={{
-        width: '100%',
-        display: 'flex',
-        transition: sliding ? 'none' : 'transform 1s ease',
-        transform: !sliding
-          ? 'translateX(calc(-70%))'
-          : dir === 'PREV'
-          ? 'translateX(calc(2 * (-70%)))'
-          : 'translateX(0%)',
-      }}
-    >
-      {props.children}
-    </div>
-  );
-};
-const Wrapper = props => {
-  return <div css={{ width: '100%', overflow: 'hidden' }}>{props.children}</div>;
-};
-const CarouselSlot = props => {
-  const { order } = props;
-  return <div css={{ width: '100%', flex: '1 0 100%', flexBasis: '80%', order: order }}>{props.children}</div>;
-};
-const initialState = { pos: 0, sliding: false, dir: 'NEXT' };
-const reducer = (state, { type, numItems }) => {
-  console.log(state, '========this.state.');
-  console.log(type, '=====tyupe/*  */');
-  switch (type) {
-    case 'reset':
-      return initialState;
-    case 'PREV':
-      return {
-        ...state,
-        dir: 'PREV',
-        sliding: true,
-        pos: state.pos === 0 ? numItems - 1 : state.pos - 1,
-      };
-    case 'NEXT':
-      return {
-        ...state,
-        dir: 'NEXT',
-        sliding: true,
-        pos: state.pos === numItems - 1 ? 0 : state.pos + 1,
-      };
-    case 'stopSliding':
-      return { ...state, sliding: false };
-    default:
-      return state;
-  }
-};
-const getOrder = ({ index, pos, numItems }) => {
-  return index - pos < 0 ? numItems - Math.abs(index - pos) : index - pos;
-};
-const GoodsSwiper = props => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const numItems = React.Children.count(props.children);
 
-  const slide = dir => {
-    dispatch({ type: dir, numItems });
-    setTimeout(() => {
-      dispatch({ type: 'stopSliding' });
-    }, 50);
-  };
-
-  const handlers = useSwipeable({
-    onSwipedLeft: () => slide('NEXT'),
-    onSwipedRight: () => slide('PREV'),
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true,
-  });
-  return (
-    <div {...handlers}>
-      <Wrapper>
-        <CarouselContainer dir={state.dir} sliding={state.sliding}>
-          {props.children.map((child, index) => {
-            return (
-              <CarouselSlot key={index} order={getOrder({ index: index, pos: state.pos, numItems })}>
-                {child}
-              </CarouselSlot>
-            );
-          })}
-        </CarouselContainer>
-      </Wrapper>
-      {/* <div css={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Icon
-          source={ArrowLeftMinor}
-          backdrop={true}
-          onClick={() => {
-            console.log('11111111');
-            slide('PREV');
-          }}
-        />
-        <Icon
-          source={ArrowRightMinor}
-          backdrop={true}
-          onClick={() => {
-            slide('NEXT');
-          }}
-        />
-      </div> */}
-    </div>
-  );
-};
 const SelectButton = () => {
   const colorType = ['NAVY', 'RED', 'KHAKI', 'BLACK'];
   const [activeIdx, setActiveIdx] = useState(0);
@@ -141,6 +23,7 @@ const SelectButton = () => {
           boxSizing: 'border-box',
           width: '30%',
           height: '2.5em',
+          lineHeight: '1.5em',
           textAlign: 'center',
           padding: '.5em 0',
           margin: '.6em 0',
@@ -197,6 +80,7 @@ const Stepper = () => {
             transition: 'opacity 0.4s ease-out',
           }}
           value={counter}
+          onChange={() => {}}
         />
         <button
           css={{
@@ -221,6 +105,104 @@ const Stepper = () => {
     </div>
   );
 };
+const RateList = () => {
+  return (
+    <div css={{ color: '#1b1b1b' }}>
+      <p css={{ fontWeight: 600, fontSize: '1.6em', marginBottom: '43px' }}>Customer reviews</p>
+      <div css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '8vw' }}>
+        <div
+          css={{
+            width: '20vw',
+            height: '20vw',
+            backgroundColor: '#1b1b1b',
+            color: '#fff',
+            borderRadius: '2px',
+            textAlign: 'center',
+            lineHeight: '20vw',
+            fontSize: '28px',
+            fontWeight: 600,
+          }}
+        >
+          5
+        </div>
+        <span css={{ marginLeft: '5vw', marginRight: '5vw' }}>Based on</span>
+        <span css={{ fontWeight: 'bold' }}>1reviews</span>
+      </div>
+      <ul css={{ width: '100%', padding: 0, '> li': { marginBottom: '.6em' } }}>
+        <li css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
+          <Rate readOnly={true} checkedIdx={0} name="rate1" />
+          <div
+            css={{
+              backgroundColor: '#1b1b1b',
+              width: '30vw',
+              height: '10px',
+              borderRadius: '3px',
+              marginLeft: '5vw',
+              marginRight: '5vw',
+            }}
+          ></div>
+          <div>1</div>
+        </li>
+        <li css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
+          <Rate readOnly={true} checkedIdx={1} name="rate2" />
+          <div
+            css={{
+              backgroundColor: '#1b1b1b',
+              width: '30vw',
+              height: '10px',
+              borderRadius: '3px',
+              marginLeft: '5vw',
+              marginRight: '5vw',
+            }}
+          ></div>
+          <div>1</div>
+        </li>
+        <li css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
+          <Rate readOnly={true} checkedIdx={2} name="rate3" />
+          <div
+            css={{
+              backgroundColor: '#1b1b1b',
+              width: '30vw',
+              height: '10px',
+              borderRadius: '3px',
+              marginLeft: '5vw',
+              marginRight: '5vw',
+            }}
+          ></div>
+          <div>1</div>
+        </li>
+        <li css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
+          <Rate readOnly={true} checkedIdx={3} name="rate4" />
+          <div
+            css={{
+              backgroundColor: '#1b1b1b',
+              width: '30vw',
+              height: '10px',
+              borderRadius: '3px',
+              marginLeft: '5vw',
+              marginRight: '5vw',
+            }}
+          ></div>
+          <div>1</div>
+        </li>
+        <li css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
+          <Rate readOnly={true} checkedIdx={4} name="rate5" />
+          <div
+            css={{
+              backgroundColor: '#1b1b1b',
+              width: '30vw',
+              height: '10px',
+              borderRadius: '3px',
+              marginLeft: '5vw',
+              marginRight: '5vw',
+            }}
+          ></div>
+          <div>1</div>
+        </li>
+      </ul>
+    </div>
+  );
+};
 const GoodsInfo = () => {
   return (
     <div css={{ padding: '0 3em' }}>
@@ -236,6 +218,7 @@ const GoodsInfo = () => {
       >
         Vintage Anchor Baseball Cap
       </h2>
+      <Rate fontSize="1.6em" readOnly={false} name="rates" />
       <div
         css={{
           display: 'flex',
@@ -244,6 +227,7 @@ const GoodsInfo = () => {
           letterSpacing: '.1em',
           fontSize: '1.2em',
           fontWeight: '600',
+          marginTop: '.5em',
           marginBottom: '2em',
         }}
       >
@@ -286,13 +270,18 @@ const GoodsInfo = () => {
           color: '#6a6a6a',
           fontSize: '16px',
           strong: { fontWeight: '700' },
-          '>hr': { borderWidth: '1px 0 0 0', width: '50px', margin: '20px auto 20px 0', borderColor: '#f1f1f1' },
-          '>ul': {
+          '> hr': {
+            borderWidth: '1px 0 0 0',
+            width: '50px',
+            margin: '20px auto 20px 0',
+            borderColor: '#f1f1f1',
+          },
+          '> ul': {
             margin: '2em 0 0 1em',
             padding: 0,
             '>li': { lineHeight: 1.6, marginBottom: '.5em' },
           },
-          '>img': { display: 'block', width: '100%', marginBottom: '20px' },
+          '> img': { display: 'block', width: '100%', marginBottom: '20px' },
         }}
       >
         <img
@@ -359,6 +348,7 @@ const GoodsInfo = () => {
           alt=""
           css={{ marginTop: '2em' }}
         />
+        <RateList />
       </div>
     </div>
   );
