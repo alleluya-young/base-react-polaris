@@ -106,6 +106,7 @@ const Stepper = () => {
   );
 };
 const RateList = () => {
+  const rateArr = [0, 1, 2, 3, 4];
   return (
     <div css={{ color: '#1b1b1b' }}>
       <p css={{ fontWeight: 600, fontSize: '1.6em', marginBottom: '43px' }}>Customer reviews</p>
@@ -128,78 +129,34 @@ const RateList = () => {
         <span css={{ marginLeft: '5vw', marginRight: '5vw' }}>Based on</span>
         <span css={{ fontWeight: 'bold' }}>1reviews</span>
       </div>
-      <ul css={{ width: '100%', padding: 0, '> li': { marginBottom: '.6em' } }}>
-        <li css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
-          <Rate readOnly={true} checkedIdx={0} name="rate1" />
-          <div
-            css={{
-              backgroundColor: '#1b1b1b',
-              width: '30vw',
-              height: '10px',
-              borderRadius: '3px',
-              marginLeft: '5vw',
-              marginRight: '5vw',
-            }}
-          ></div>
-          <div>1</div>
-        </li>
-        <li css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
-          <Rate readOnly={true} checkedIdx={1} name="rate2" />
-          <div
-            css={{
-              backgroundColor: '#1b1b1b',
-              width: '30vw',
-              height: '10px',
-              borderRadius: '3px',
-              marginLeft: '5vw',
-              marginRight: '5vw',
-            }}
-          ></div>
-          <div>1</div>
-        </li>
-        <li css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
-          <Rate readOnly={true} checkedIdx={2} name="rate3" />
-          <div
-            css={{
-              backgroundColor: '#1b1b1b',
-              width: '30vw',
-              height: '10px',
-              borderRadius: '3px',
-              marginLeft: '5vw',
-              marginRight: '5vw',
-            }}
-          ></div>
-          <div>1</div>
-        </li>
-        <li css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
-          <Rate readOnly={true} checkedIdx={3} name="rate4" />
-          <div
-            css={{
-              backgroundColor: '#1b1b1b',
-              width: '30vw',
-              height: '10px',
-              borderRadius: '3px',
-              marginLeft: '5vw',
-              marginRight: '5vw',
-            }}
-          ></div>
-          <div>1</div>
-        </li>
-        <li css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}>
-          <Rate readOnly={true} checkedIdx={4} name="rate5" />
-          <div
-            css={{
-              backgroundColor: '#1b1b1b',
-              width: '30vw',
-              height: '10px',
-              borderRadius: '3px',
-              marginLeft: '5vw',
-              marginRight: '5vw',
-            }}
-          ></div>
-          <div>1</div>
-        </li>
+      <ul css={{ width: '100%', padding: 0, marginBottom: '2.5em', '> li': { marginBottom: '.6em' } }}>
+        {map(rateArr, (item, idx) => (
+          <li
+            key={idx + 'rates'}
+            css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}
+          >
+            <Rate checkedIdx={item} name={`rate${idx}`} disabled={true} />
+            <div
+              css={{
+                backgroundColor: idx === 0 ? '#1b1b1b' : '#f1f1f1',
+                width: '30vw',
+                height: '10px',
+                borderRadius: '3px',
+                marginLeft: '5vw',
+                marginRight: '5vw',
+              }}
+            ></div>
+            <div>{idx === 0 ? 1 : 0}</div>
+          </li>
+        ))}
       </ul>
+      <div>
+        <p css={{ fontWeight: 600, fontSize: '1.6em', margin: '1.6em 0 .6em' }}>Write A Review</p>
+        <div css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '1em' }}>
+          <span css={{ marginRight: '.8em' }}>Your rating</span>
+          <Rate checkedIdx={0} />
+        </div>
+      </div>
     </div>
   );
 };
@@ -218,7 +175,10 @@ const GoodsInfo = () => {
       >
         Vintage Anchor Baseball Cap
       </h2>
-      <Rate fontSize="1.6em" readOnly={false} name="rates" />
+      <div css={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Rate disabled={true} checkedIdx={0} />
+        <span css={{ marginLeft: '.2em' }}>(1)</span>
+      </div>
       <div
         css={{
           display: 'flex',
