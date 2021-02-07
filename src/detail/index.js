@@ -156,6 +156,11 @@ const RateList = () => {
           <span css={{ marginRight: '.8em' }}>Your rating</span>
           <Rate checkedIdx={0} />
         </div>
+        <div>
+          <input type="text" name="author" placeholder="Your Name" required />
+          <input type="email" name="email" placeholder="Your Email" required />
+          <textarea rows="4" name="review" placeholder="Enter your feedback here" required=""></textarea>
+        </div>
       </div>
     </div>
   );
