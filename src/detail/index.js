@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { map } from 'lodash';
 import { Rate } from '../component/Rate';
 import { GoodsSwiper, Item } from '../component/GoodsSwiper';
+import { RecommendGoods } from '../component/RecommendGoods';
 // import { Icon } from '@shopify/polaris';
 // import { ArrowLeftMinor, ArrowRightMinor } from '@shopify/polaris-icons';
 
@@ -126,7 +127,7 @@ const RateList = () => {
         >
           5
         </div>
-        <span css={{ marginLeft: '5vw', marginRight: '5vw' }}>Based on</span>
+        <span css={{ marginLeft: '8vw', marginRight: '5vw' }}>Based on</span>
         <span css={{ fontWeight: 'bold' }}>1reviews</span>
       </div>
       <ul css={{ width: '100%', padding: 0, marginBottom: '2.5em', '> li': { marginBottom: '.6em' } }}>
@@ -156,10 +157,65 @@ const RateList = () => {
           <span css={{ marginRight: '.8em' }}>Your rating</span>
           <Rate checkedIdx={0} />
         </div>
-        <div>
+        <div
+          css={{
+            'input,textarea': {
+              border: '1px solid #e1e1e1',
+              borderRadius: '4px',
+              outline: 'none',
+              width: '100%',
+              boxSizing: 'border-box',
+              padding: '11px',
+              marginBottom: '10px',
+            },
+          }}
+        >
           <input type="text" name="author" placeholder="Your Name" required />
           <input type="email" name="email" placeholder="Your Email" required />
           <textarea rows="4" name="review" placeholder="Enter your feedback here" required=""></textarea>
+          <div css={{ marginBottom: '10px' }}>
+            <label
+              htmlFor="imgUpload"
+              css={{
+                fontSize: '14px',
+                padding: '6px 0',
+                minHeight: '26px',
+                backgroundColor: '#fff',
+                borderRadius: '4px',
+                border: '1px dashed #d7dae2',
+                color: '#000',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              Add photos
+            </label>
+            <input
+              id="imgUpload"
+              name="images"
+              type="file"
+              accept="image/x-png,image/jpeg"
+              css={{ display: 'none' }}
+            ></input>
+          </div>
+          <button
+            css={{
+              width: '100%',
+              fontSize: '14px',
+              backgroundColor: '#1b1b1b',
+              color: '#fff',
+              borderRadius: '6px',
+              height: '40px',
+              padding: '8px 16px',
+              border: 'none',
+              outline: 'none',
+              fontWeight: '600',
+              marginBottom: '40px',
+            }}
+          >
+            Submit Review
+          </button>
         </div>
       </div>
     </div>
@@ -314,10 +370,26 @@ const GoodsInfo = () => {
           css={{ marginTop: '2em' }}
         />
         <RateList />
+        <RecommendGoods />
       </div>
     </div>
   );
 };
+const GoodsFooter = () => (
+  <div
+    css={{
+      textAlign: 'center',
+      lineHeight: '1.5',
+      marginBottom: '20px',
+      textRendering: 'optimizeLegibility',
+      color: '#6a6a6a',
+      fontSize: '14px',
+    }}
+  >
+    <div>© 2021, NBMAX</div>
+    <div>Powered by Shopify</div>
+  </div>
+);
 
 export const Detail = () => {
   const history = useHistory();
@@ -344,6 +416,7 @@ export const Detail = () => {
         <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/product-image-653113466_360x.jpg?v=1611564424" />
       </GoodsSwiper>
       <GoodsInfo />
+      <GoodsFooter />
     </div>
   );
 };
