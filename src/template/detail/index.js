@@ -1,129 +1,9 @@
-import React, { useCallback, useState, useReducer } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useSwipeable } from 'react-swipeable';
+import React, { useState } from 'react';
 import { map } from 'lodash';
-// import { Icon } from '@shopify/polaris';
-// import { ArrowLeftMinor, ArrowRightMinor } from '@shopify/polaris-icons';
-const Item = props => {
-  const { src } = props;
-  return (
-    <div
-      css={{
-        textAlign: 'center',
-        backgroundSize: 'cover',
-        backgroundImage: `url(${src})`,
-        width: 'auto',
-        height: 360,
-      }}
-    ></div>
-  );
-};
-const CarouselContainer = props => {
-  const { sliding, dir } = props;
-  return (
-    <div
-      css={{
-        width: '100%',
-        display: 'flex',
-        transition: sliding ? 'none' : 'transform 1s ease',
-        transform: !sliding
-          ? 'translateX(calc(-70%))'
-          : dir === 'PREV'
-          ? 'translateX(calc(2 * (-70%)))'
-          : 'translateX(0%)',
-      }}
-    >
-      {props.children}
-    </div>
-  );
-};
-const Wrapper = props => {
-  return <div css={{ width: '100%', overflow: 'hidden' }}>{props.children}</div>;
-};
-const CarouselSlot = props => {
-  const { order } = props;
-  return <div css={{ width: '100%', flex: '1 0 100%', flexBasis: '80%', order: order }}>{props.children}</div>;
-};
-const initialState = { pos: 0, sliding: false, dir: 'NEXT' };
-const reducer = (state, { type, numItems }) => {
-  console.log(state, '========this.state.');
-  console.log(type, '=====tyupe/*  */');
-  switch (type) {
-    case 'reset':
-      return initialState;
-    case 'PREV':
-      return {
-        ...state,
-        dir: 'PREV',
-        sliding: true,
-        pos: state.pos === 0 ? numItems - 1 : state.pos - 1,
-      };
-    case 'NEXT':
-      return {
-        ...state,
-        dir: 'NEXT',
-        sliding: true,
-        pos: state.pos === numItems - 1 ? 0 : state.pos + 1,
-      };
-    case 'stopSliding':
-      return { ...state, sliding: false };
-    default:
-      return state;
-  }
-};
-const getOrder = ({ index, pos, numItems }) => {
-  return index - pos < 0 ? numItems - Math.abs(index - pos) : index - pos;
-};
-const GoodsSwiper = props => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const numItems = React.Children.count(props.children);
+import { Rate } from '../../component/Rate';
+import { GoodsSwiper, Item } from '../../component/GoodsSwiper';
+import { RecommendGoods } from '../../component/RecommendGoods';
 
-  const slide = dir => {
-    dispatch({ type: dir, numItems });
-    setTimeout(() => {
-      dispatch({ type: 'stopSliding' });
-    }, 50);
-  };
-
-  const handlers = useSwipeable({
-    onSwipedLeft: () => slide('NEXT'),
-    onSwipedRight: () => slide('PREV'),
-    preventDefaultTouchmoveEvent: true,
-    trackMouse: true,
-  });
-  return (
-    <div {...handlers}>
-      <Wrapper>
-        <CarouselContainer dir={state.dir} sliding={state.sliding}>
-          {props.children.map((child, index) => {
-            return (
-              <CarouselSlot key={index} order={getOrder({ index: index, pos: state.pos, numItems })}>
-                {child}
-              </CarouselSlot>
-            );
-          })}
-        </CarouselContainer>
-      </Wrapper>
-      {/* <div css={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Icon
-          source={ArrowLeftMinor}
-          backdrop={true}
-          onClick={() => {
-            console.log('11111111');
-            slide('PREV');
-          }}
-        />
-        <Icon
-          source={ArrowRightMinor}
-          backdrop={true}
-          onClick={() => {
-            slide('NEXT');
-          }}
-        />
-      </div> */}
-    </div>
-  );
-};
 const SelectButton = () => {
   const colorType = ['NAVY', 'RED', 'KHAKI', 'BLACK'];
   const [activeIdx, setActiveIdx] = useState(0);
@@ -141,6 +21,7 @@ const SelectButton = () => {
           boxSizing: 'border-box',
           width: '30%',
           height: '2.5em',
+          lineHeight: '1.5em',
           textAlign: 'center',
           padding: '.5em 0',
           margin: '.6em 0',
@@ -197,6 +78,7 @@ const Stepper = () => {
             transition: 'opacity 0.4s ease-out',
           }}
           value={counter}
+          onChange={() => {}}
         />
         <button
           css={{
@@ -221,6 +103,121 @@ const Stepper = () => {
     </div>
   );
 };
+const RateList = () => {
+  const rateArr = [0, 1, 2, 3, 4];
+  return (
+    <div css={{ color: '#1b1b1b' }}>
+      <p css={{ fontWeight: 600, fontSize: '1.6em', marginBottom: '43px' }}>Customer reviews</p>
+      <div css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '8vw' }}>
+        <div
+          css={{
+            width: '20vw',
+            height: '20vw',
+            backgroundColor: '#1b1b1b',
+            color: '#fff',
+            borderRadius: '2px',
+            textAlign: 'center',
+            lineHeight: '20vw',
+            fontSize: '28px',
+            fontWeight: 600,
+          }}
+        >
+          5
+        </div>
+        <span css={{ marginLeft: '8vw', marginRight: '5vw' }}>Based on</span>
+        <span css={{ fontWeight: 'bold' }}>1reviews</span>
+      </div>
+      <ul css={{ width: '100%', padding: 0, marginBottom: '2.5em', '> li': { marginBottom: '.6em' } }}>
+        {map(rateArr, (item, idx) => (
+          <li
+            key={idx + 'rates'}
+            css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', width: '100%' }}
+          >
+            <Rate checkedIdx={item} name={`rate${idx}`} disabled={true} />
+            <div
+              css={{
+                backgroundColor: idx === 0 ? '#1b1b1b' : '#f1f1f1',
+                width: '30vw',
+                height: '10px',
+                borderRadius: '3px',
+                marginLeft: '5vw',
+                marginRight: '5vw',
+              }}
+            ></div>
+            <div>{idx === 0 ? 1 : 0}</div>
+          </li>
+        ))}
+      </ul>
+      <div>
+        <p css={{ fontWeight: 600, fontSize: '1.6em', margin: '1.6em 0 .6em' }}>Write A Review</p>
+        <div css={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', marginBottom: '1em' }}>
+          <span css={{ marginRight: '.8em' }}>Your rating</span>
+          <Rate checkedIdx={0} />
+        </div>
+        <div
+          css={{
+            'input,textarea': {
+              border: '1px solid #e1e1e1',
+              borderRadius: '4px',
+              outline: 'none',
+              width: '100%',
+              boxSizing: 'border-box',
+              padding: '11px',
+              marginBottom: '10px',
+            },
+          }}
+        >
+          <input type="text" name="author" placeholder="Your Name" required />
+          <input type="email" name="email" placeholder="Your Email" required />
+          <textarea rows="4" name="review" placeholder="Enter your feedback here" required=""></textarea>
+          <div css={{ marginBottom: '10px' }}>
+            <label
+              htmlFor="imgUpload"
+              css={{
+                fontSize: '14px',
+                padding: '6px 0',
+                minHeight: '26px',
+                backgroundColor: '#fff',
+                borderRadius: '4px',
+                border: '1px dashed #d7dae2',
+                color: '#000',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              Add photos
+            </label>
+            <input
+              id="imgUpload"
+              name="images"
+              type="file"
+              accept="image/x-png,image/jpeg"
+              css={{ display: 'none' }}
+            ></input>
+          </div>
+          <button
+            css={{
+              width: '100%',
+              fontSize: '14px',
+              backgroundColor: '#1b1b1b',
+              color: '#fff',
+              borderRadius: '6px',
+              height: '40px',
+              padding: '8px 16px',
+              border: 'none',
+              outline: 'none',
+              fontWeight: '600',
+              marginBottom: '40px',
+            }}
+          >
+            Submit Review
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 const GoodsInfo = () => {
   return (
     <div css={{ padding: '0 3em' }}>
@@ -236,6 +233,10 @@ const GoodsInfo = () => {
       >
         Vintage Anchor Baseball Cap
       </h2>
+      <div css={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Rate disabled={true} checkedIdx={0} />
+        <span css={{ marginLeft: '.2em' }}>(1)</span>
+      </div>
       <div
         css={{
           display: 'flex',
@@ -244,6 +245,7 @@ const GoodsInfo = () => {
           letterSpacing: '.1em',
           fontSize: '1.2em',
           fontWeight: '600',
+          marginTop: '.5em',
           marginBottom: '2em',
         }}
       >
@@ -286,13 +288,18 @@ const GoodsInfo = () => {
           color: '#6a6a6a',
           fontSize: '16px',
           strong: { fontWeight: '700' },
-          '>hr': { borderWidth: '1px 0 0 0', width: '50px', margin: '20px auto 20px 0', borderColor: '#f1f1f1' },
-          '>ul': {
+          '> hr': {
+            borderWidth: '1px 0 0 0',
+            width: '50px',
+            margin: '20px auto 20px 0',
+            borderColor: '#f1f1f1',
+          },
+          '> ul': {
             margin: '2em 0 0 1em',
             padding: 0,
             '>li': { lineHeight: 1.6, marginBottom: '.5em' },
           },
-          '>img': { display: 'block', width: '100%', marginBottom: '20px' },
+          '> img': { display: 'block', width: '100%', marginBottom: '20px' },
         }}
       >
         <img
@@ -359,24 +366,31 @@ const GoodsInfo = () => {
           alt=""
           css={{ marginTop: '2em' }}
         />
+        <RateList />
+        <RecommendGoods />
       </div>
     </div>
   );
 };
+const GoodsFooter = () => (
+  <div
+    css={{
+      textAlign: 'center',
+      lineHeight: '1.5',
+      marginBottom: '20px',
+      textRendering: 'optimizeLegibility',
+      color: '#6a6a6a',
+      fontSize: '14px',
+    }}
+  >
+    <div>© 2021, NBMAX</div>
+    <div>Powered by Shopify</div>
+  </div>
+);
 
 export const Detail = () => {
-  const history = useHistory();
   return (
     <div css={{ backgroundColor: '#fff' }}>
-      {/* detail
-      <Button
-        onClick={() => {
-          history.goBack();
-        }}
-      >
-        Back
-      </Button>
-      详情 */}
       <GoodsSwiper>
         <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/1111_ab7e8af3-9a6b-4f2a-9170-7e5c381477e0_360x.jpg?v=1611564424" />
         <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/product-image-653113448_d15a6413-0989-4a17-aa9e-efd005676ee1_360x.jpg?v=1611564424" />
@@ -389,6 +403,7 @@ export const Detail = () => {
         <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/product-image-653113466_360x.jpg?v=1611564424" />
       </GoodsSwiper>
       <GoodsInfo />
+      <GoodsFooter />
     </div>
   );
 };
