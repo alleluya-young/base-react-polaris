@@ -5,11 +5,11 @@ export const Item = props => {
   return (
     <div
       css={{
-        textAlign: 'center',
-        backgroundSize: 'cover',
+        backgroundSize: '100% 100%',
         backgroundImage: `url(${src})`,
-        width: 'auto',
-        height: 360,
+        margin:'0 auto',
+        width: '100vw',
+        height: '100vw',
       }}
     ></div>
   );
@@ -23,9 +23,9 @@ const CarouselContainer = props => {
         display: 'flex',
         transition: sliding ? 'none' : 'transform 1s ease',
         transform: !sliding
-          ? 'translateX(calc(-70%))'
+          ? 'translateX(calc(-100%))'
           : dir === 'PREV'
-          ? 'translateX(calc(2 * (-70%)))'
+          ? 'translateX(calc(2 * (-100%)))'
           : 'translateX(0%)',
       }}
     >
@@ -38,7 +38,7 @@ const Wrapper = props => {
 };
 const CarouselSlot = props => {
   const { order } = props;
-  return <div css={{ width: '100%', flex: '1 0 100%', flexBasis: '80%', order: order }}>{props.children}</div>;
+  return <div css={{ width: '100%', flex: '1 0 100%', order: order }}>{props.children}</div>;
 };
 const initialState = { pos: 0, sliding: false, dir: 'NEXT' };
 const reducer = (state, { type, numItems }) => {
