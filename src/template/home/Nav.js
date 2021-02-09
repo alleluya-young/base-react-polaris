@@ -7,12 +7,24 @@ import { useHistory } from "react-router-dom";
 
 const Navs = [
   {
-    label: "Home",
+    label: "首页",
     path: "/",
   },
   {
-    label: "List",
-    path: "/list",
+    label: "所有产品",
+    path: "/collections",
+  },
+  {
+    label: "所有分类",
+    path: "/category",
+  },
+  {
+    label: "联系我们",
+    path: "/contact-us",
+  },
+  {
+    label: "问题列表",
+    path: "/faq",
   },
 ];
 

@@ -1,8 +1,10 @@
 import { Route, Switch } from "react-router-dom";
 import React from "react";
 import { Detail } from "./detail";
-import { List } from "./list/List";
+import { Category, AllProducts } from "./list/Derive";
 import { Home } from "./home";
+import { ContactUs } from "./extra/ContactUs";
+import { Faq } from "./extra/Faq";
 
 export const Routes = () => {
   return (
@@ -13,8 +15,17 @@ export const Routes = () => {
       <Route path={"/detail"}>
         <Detail />
       </Route>
-      <Route path={"/list"}>
-        <List />
+      <Route path={"/category"}>
+        <Category />
+      </Route>
+      <Route path={"/collections"}>
+        <AllProducts />
+      </Route>
+      <Route path={"/contact-us"}>
+        <ContactUs />
+      </Route>
+      <Route path={"/faq"}>
+        <Faq />
       </Route>
     </Switch>
   );
