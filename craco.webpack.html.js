@@ -18,7 +18,7 @@ const overrideWebpackConfig = ({ webpackConfig }) => {
   htmlPlugin.options.meta = {
     ...htmlPlugin.options.meta,
     "devkit:config": stringifyMetaContent({
-      SRV_MAIN: isProd ? "__PROD__" : "http://www.lvjmyupo.xyz/",
+      SRV_MAIN: isProd ? "__PROD__" : "http://www.lvjmyupo.xyz",
     }),
   };
   return webpackConfig;

@@ -1,17 +1,20 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { Global } from "@emotion/react";
-import { normalize } from "polished";
-import { conf, ConfigProvider } from "./core/config";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Global, ThemeProvider } from '@emotion/react';
+import { normalize } from 'polished';
+import { conf, ConfigProvider } from './core/config';
 
-import { App } from "./template/App";
+import { App } from './template/App';
+import { ds } from './ds';
 
 ReactDOM.render(
   <React.StrictMode>
     <ConfigProvider value={{ config: conf() }}>
       <Global styles={normalize()} />
-      <App />
+      <ThemeProvider theme={ds}>
+        <App />
+      </ThemeProvider>
     </ConfigProvider>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root'),
 );
