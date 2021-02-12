@@ -1,23 +1,29 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { ProductItem } from '../common/ProductItem';
-import { useRequest } from '../../core/request';
-import { getIndexPage } from '../../clients';
+import { map } from 'lodash';
+import { useHomeInfo } from '../../clients/hooks';
 
 export const Home = () => {
   const history = useHistory();
 
-  const [data] = useRequest(getIndexPage);
-
-  console.log('@@@@@@@@@@', data);
+  const [{ recommendedLists }] = useHomeInfo();
 
   return (
     <div>
-      <ProductItem
-        onClick={() => {
-          history.push('/detail');
-        }}
-      />
+      {map(recommendedLists, ({ productList }) => {
+        return map(productList, item => {
+          return (
+            <ProductItem
+              key={item.randomChar}
+              product={item}
+              onClick={() => {
+                history.push('/detail');
+              }}
+            />
+          );
+        });
+      })}
     </div>
   );
 };

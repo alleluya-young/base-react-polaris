@@ -51,5 +51,5 @@ export const useRequest = (service, options) => {
     };
   }, []);
 
-  return [data.data, run, loading, error];
+  return [data?.data, run, loading, error];
 };

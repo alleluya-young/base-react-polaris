@@ -1,31 +1,32 @@
-import { Route, Switch } from "react-router-dom";
-import React from "react";
-import { Detail } from "./detail";
-import { Category, AllProducts } from "./list/Derive";
-import { Home } from "./home";
-import { ContactUs } from "./extra/ContactUs";
-import { Faq } from "./extra/Faq";
+import { Route, Switch } from 'react-router-dom';
+import React from 'react';
+import { Detail } from './detail';
+import { Category } from './list/Derive';
+import { Home } from './home';
+import { Faq } from './extra/Faq';
+import { List } from './list/List';
+import { Service } from './extra/Service';
 
 export const Routes = () => {
   return (
     <Switch>
-      <Route exact path={"/"}>
+      <Route exact path={'/'}>
         <Home />
       </Route>
-      <Route path={"/detail"}>
+      <Route path={'/detail'}>
         <Detail />
       </Route>
-      <Route path={"/category"}>
+      <Route path={'/category'}>
         <Category />
       </Route>
-      <Route path={"/collections"}>
-        <AllProducts />
+      <Route path={'/collections/:id'}>
+        <List />
       </Route>
-      <Route path={"/contact-us"}>
-        <ContactUs />
-      </Route>
-      <Route path={"/faq"}>
+      <Route path={'/faq'}>
         <Faq />
+      </Route>
+      <Route path={'/service/:id'}>
+        <Service />
       </Route>
     </Switch>
   );

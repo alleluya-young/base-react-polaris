@@ -29,6 +29,7 @@ export const getAllType = createRequestObject('getAllType', () => {
   return {
     url: '/api-shop-isw/type/getAllType/',
     method: 'post',
+    data: {},
   };
 });
 
@@ -45,6 +46,7 @@ export const getTerms = createRequestObject('getTerms', () => {
   return {
     url: '/api-shop-isw/terms/getTerms/',
     method: 'post',
+    data: {},
   };
 });
 
