@@ -1,7 +1,8 @@
-import { useRequest as useRequestOrigin } from "ahooks";
-import { useConfig } from "../config";
-import { useEffect, useRef } from "react";
-import { get, isObject, startsWith, isString } from "lodash";
+import { useRequest as useRequestOrigin } from 'ahooks';
+import { useConfig } from '../config';
+import { useEffect, useRef } from 'react';
+import { get, startsWith } from 'lodash';
+import axios from 'axios';
 
 /**
  * 重写 service 中的url
@@ -13,22 +14,18 @@ export const useRequest = (service, options) => {
   const config = useConfig();
   const urlPrefixRef = useRef();
   const { data, error, loading, run, cancel } = useRequestOrigin(
-    () => {
-      if (isObject(service) && service.url) {
-        if (!startsWith(service.url, "http")) {
-          service.url = urlPrefixRef.current + service.url;
-        }
-      } else if (isString(service)) {
-        if (!startsWith(service, "http")) {
-          service = urlPrefixRef.current + service;
-        }
+    params => {
+      const o = service.optionsMethod(params);
+      if (!startsWith(o.url, 'http')) {
+        o.url = urlPrefixRef.current + o.url;
       }
-      return service;
+      return o;
     },
     {
       ...options,
+      requestMethod: params => axios(params),
       manual: true,
-    }
+    },
   );
   useEffect(() => {
     const prefix = config.SRV_MAIN;
@@ -36,14 +33,14 @@ export const useRequest = (service, options) => {
       return;
     }
     let mainPrefix;
-    if (prefix === "__PROD__") {
+    if (prefix === '__PROD__') {
       mainPrefix = `${window.location.protocol}//${window.location.host}/api-shop-isw`;
     } else {
-      mainPrefix = `${prefix}/api-shop-isw`;
+      mainPrefix = `${prefix}`;
     }
     urlPrefixRef.current = mainPrefix;
 
-    if (!get(options, "manual")) {
+    if (!get(options, 'manual')) {
       run();
     }
   }, [config]);
@@ -54,5 +51,5 @@ export const useRequest = (service, options) => {
     };
   }, []);
 
-  return [data, run, loading, error];
+  return [data.data, run, loading, error];
 };
