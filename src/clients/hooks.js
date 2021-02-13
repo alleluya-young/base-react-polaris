@@ -1,10 +1,8 @@
 import { useRequest } from '../core/request';
-import { getAllType, getIndexPage, getTerms, selectSiteProductByType } from './index';
+import { getAllType, getIndexPage, getProduct, getTerms, selectSiteProductByType } from './index';
 import { useEffect, useMemo } from 'react';
-import { get, map, filter } from 'lodash';
+import { get, map, filter, isUndefined } from 'lodash';
 import { productItemConvert } from './converts';
-
-//convert
 
 export const useHomeInfo = () => {
   const [data, run, loading, error] = useRequest(getIndexPage);
@@ -56,5 +54,19 @@ export const useTermsInfo = serviceId => {
     }
     return d;
   }, [data, serviceId]);
+  return [convertData, run, loading, error];
+};
+
+export const useDetailInfo = randomChar => {
+  const [data, run, loading, error] = useRequest(getProduct, { manual: true });
+
+  useEffect(() => {
+    randomChar && run({ randomChar });
+  }, [randomChar]);
+
+  const convertData = useMemo(() => {
+    return get(data, ['objs'], {});
+  }, [data]);
+
   return [convertData, run, loading, error];
 };

@@ -21,6 +21,7 @@ export const geMarketing = createRequestObject('geMarketing', () => {
   return {
     url: '/api-shop-isw/productIndex/geMarketing/',
     method: 'post',
+    data: {},
   };
 });
 
@@ -34,10 +35,11 @@ export const getAllType = createRequestObject('getAllType', () => {
 });
 
 //查询所有类别
-export const getTranslatePageByYn = createRequestObject('getTranslatePageByYn', () => {
+export const getTranslatePageByYn = createRequestObject('getTranslatePageByYn', ({ yn }) => {
   return {
     url: '/api-shop-isw/es/getTransalatePageByYn/',
     method: 'post',
+    data: { yn },
   };
 });
 

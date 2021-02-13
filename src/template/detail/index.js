@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
-import { map } from 'lodash';
+import { map, size, get, head } from 'lodash';
 import { Rate } from '../../component/Rate';
 import { GoodsSwiper, Item } from '../../component/GoodsSwiper';
 import { RecommendGoods } from '../../component/RecommendGoods';
+import { useDetailInfo } from '../../clients/hooks';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import { Stack } from '../../component/Stack';
+import { useUrlState } from '../../core/hooks';
+import { useLanguageFn } from '../../common/language';
+import { CountOperate } from '../../component/CountOperate';
 
 const SelectButton = () => {
   const colorType = ['NAVY', 'RED', 'KHAKI', 'BLACK'];
@@ -388,22 +396,123 @@ const GoodsFooter = () => (
   </div>
 );
 
-export const Detail = () => {
+export const Detail1 = () => {
   return (
     <div css={{ backgroundColor: '#fff' }}>
-      <GoodsSwiper>
-        <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/1111_ab7e8af3-9a6b-4f2a-9170-7e5c381477e0_360x.jpg?v=1611564424" />
-        <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/product-image-653113448_d15a6413-0989-4a17-aa9e-efd005676ee1_360x.jpg?v=1611564424" />
-        <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/product-image-653113433_360x.jpg?v=1611564424" />
-        <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/product-image-653113435_360x.jpg?v=1611564424" />
-        <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/product-image-653113436_360x.jpg?v=1611564424" />
-        <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/product-image-653113444_360x.jpg?v=1611564424" />
-        <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/product-image-653113446_360x.jpg?v=1611564424" />
-        <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/product-image-653113442_360x.jpg?v=1611564424" />
-        <Item src="https://cdn.shopifycdn.net/s/files/1/0440/4409/1555/products/product-image-653113466_360x.jpg?v=1611564424" />
-      </GoodsSwiper>
       <GoodsInfo />
       <GoodsFooter />
+    </div>
+  );
+};
+
+const SkuGroup = ({ skuData, onChange }) => {
+  const [urlState, setUrlState] = useUrlState({
+    [skuData.affProductAttributeId]:
+      get(head(skuData.tAffProductAttributeValueList), 'affProductAttributeValueId', '') + '',
+  });
+  const currentId = get(urlState, String(skuData.affProductAttributeId));
+
+  return (
+    <div css={{ marginTop: '2em', padding: '0 1em' }}>
+      <Typography variant={'subtitle1'} css={t => ({ color: t.color.textLight, textAlign: 'center' })}>
+        {skuData.affProductAttributeName}
+      </Typography>
+      <Stack inline justify={'center'} css={{ flexWrap: 'wrap', marginTop: '1em' }}>
+        {map(skuData.tAffProductAttributeValueList, ({ affProductAttributeValueId, affProductAttributeValue }) => (
+          <Button
+            key={affProductAttributeValueId}
+            css={{
+              margin: '.3em .5em',
+              padding: '.3em .8em',
+              borderRadius: 0,
+              border: currentId === String(affProductAttributeValueId) ? '1px solid #1b1b1b' : '1px solid transparent',
+            }}
+            onClick={() => {
+              setUrlState({ [skuData.affProductAttributeId]: affProductAttributeValueId });
+            }}
+          >
+            {affProductAttributeValue}
+          </Button>
+        ))}
+      </Stack>
+    </div>
+  );
+};
+
+const Comment = () => {
+  return <div></div>;
+};
+
+//todo:: 1、立即购买按钮条件
+export const Detail = () => {
+  const history = useHistory();
+  const match = useRouteMatch();
+  const [{ tAffProductImage, currency, tAffProduct, tAffProductAttribute }] = useDetailInfo(match.params.id);
+
+  const languageWithKey = useLanguageFn();
+
+  return (
+    <div>
+      {size(tAffProductImage) > 0 && (
+        <GoodsSwiper>
+          {map(tAffProductImage, item => (
+            <Item key={item.affProductImageId} src={item.affProductImageS3Url} />
+          ))}
+        </GoodsSwiper>
+      )}
+      <div css={{ padding: '0 1.8em' }}>
+        <Typography variant={'h6'} align={'center'}>
+          {tAffProduct?.affProductName}
+        </Typography>
+        <Typography variant={'subtitle1'} align={'center'} css={{ marginTop: '1em' }}>
+          <span css={{ textDecoration: 'line-through' }}>
+            {currency?.currencySymbol || ''}
+            {tAffProduct?.originalPrice || ''}
+          </span>
+          &nbsp; &nbsp;
+          <span css={t => ({ color: t.color.danger })}>
+            {currency?.currencySymbol || ''}
+            {tAffProduct?.lowPrice || ''}
+          </span>
+        </Typography>
+
+        {map(tAffProductAttribute, item => (
+          <SkuGroup key={item.affProductAttributeId} skuData={item} />
+        ))}
+
+        <Stack inline justify={'center'} css={{ marginTop: '1.8em' }}>
+          <Typography variant={'subtitle1'} css={t => ({ color: t.color.textLight, marginRight: '.8em' })}>
+            {languageWithKey('quantity')}
+          </Typography>
+          <CountOperate />
+        </Stack>
+
+        <Button fullWidth css={{ borderRadius: 0, border: '1px solid #1b1b1b', marginTop: '1.6em' }}>
+          {languageWithKey('addToCart')}
+        </Button>
+        <Button fullWidth style={{ borderRadius: 0, backgroundColor: '#1b1b1b', color: 'white', marginTop: '.7em' }}>
+          {languageWithKey('buyNow')}
+        </Button>
+      </div>
+
+      <div
+        css={{
+          margin: '1em 1.8em',
+          img: {
+            maxWidth: '100%!important',
+            verticalAlign: 'top',
+            width: 'auto !important',
+            height: 'auto !important',
+          },
+          video: {
+            maxWidth: '100%!important',
+          },
+          iframe: {
+            maxWidth: '100%!important',
+          },
+        }}
+        dangerouslySetInnerHTML={{ __html: tAffProduct?.affProductDesc ? tAffProduct.affProductDesc : '' }}
+      />
     </div>
   );
 };
