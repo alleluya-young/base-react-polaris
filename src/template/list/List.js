@@ -16,7 +16,7 @@ export const List = () => {
           key={item.randomChar}
           product={item}
           onClick={() => {
-            history.push('/detail');
+            history.push(`/${item.randomChar}`);
           }}
         />
       ))}

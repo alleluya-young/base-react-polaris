@@ -18,7 +18,7 @@ export const Home = () => {
               key={item.randomChar}
               product={item}
               onClick={() => {
-                history.push('/detail');
+                history.push(`/${item.randomChar}`);
               }}
             />
           );

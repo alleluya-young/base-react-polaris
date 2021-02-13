@@ -3,7 +3,7 @@ import { Stack } from '../../component/Stack';
 
 import Typography from '@material-ui/core/Typography';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import { CountOperate } from './CountOperate';
+import { CountOperate } from '../../component/CountOperate';
 
 export const ProductItem = ({ onClick, product }) => {
   const { imgUrl, title, unit, lowPrice, originalPrice, id } = product;
@@ -45,7 +45,7 @@ export const ProductItemLine = ({ ...otherProps }) => {
         <Typography variant={'subtitle1'}>产品名称</Typography>
         <Typography variant={'subtitle2'}>产品简介</Typography>
         <Stack inline justify={'space-between'} css={{ marginTop: '.3em' }}>
-          <CountOperate />
+          <CountOperate mode={'small'} />
           <Typography variant={'caption'} css={{ textAlign: 'center' }}>
             — $22.9
           </Typography>

@@ -41,7 +41,7 @@ export const useRequest = (service, options) => {
     urlPrefixRef.current = mainPrefix;
 
     if (!get(options, 'manual')) {
-      run();
+      run(get(options, 'defaultParams'));
     }
   }, [config]);
 

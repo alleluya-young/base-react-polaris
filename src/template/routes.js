@@ -13,9 +13,6 @@ export const Routes = () => {
       <Route exact path={'/'}>
         <Home />
       </Route>
-      <Route path={'/detail'}>
-        <Detail />
-      </Route>
       <Route path={'/category'}>
         <Category />
       </Route>
@@ -27,6 +24,9 @@ export const Routes = () => {
       </Route>
       <Route path={'/service/:id'}>
         <Service />
+      </Route>
+      <Route path={'/:id'}>
+        <Detail />
       </Route>
     </Switch>
   );

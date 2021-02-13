@@ -7,8 +7,6 @@ export const Service = () => {
   const match = useRouteMatch();
   const [data] = useTermsInfo(match.params.id);
 
-  console.log(data);
-
   return (
     <div css={{ padding: '1em 1.8em' }}>
       <Typography variant={'h6'} align={'center'}>
