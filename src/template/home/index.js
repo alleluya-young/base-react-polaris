@@ -1,18 +1,29 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import { ProductItem } from "../common/ProductItem";
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { ProductItem } from '../common/ProductItem';
+import { map } from 'lodash';
+import { useHomeInfo } from '../../clients/hooks';
 
 export const Home = () => {
   const history = useHistory();
 
+  const [{ recommendedLists }] = useHomeInfo();
+
   return (
     <div>
-      <ProductItem
-        onClick={() => {
-          history.push("/detail");
-        }}
-      />
+      {map(recommendedLists, ({ productList }) => {
+        return map(productList, item => {
+          return (
+            <ProductItem
+              key={item.randomChar}
+              product={item}
+              onClick={() => {
+                history.push(`/${item.randomChar}`);
+              }}
+            />
+          );
+        });
+      })}
     </div>
   );
 };
